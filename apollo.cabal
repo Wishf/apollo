@@ -1,0 +1,26 @@
+name: apollo
+version: 0.0
+license-file: LICENSE
+author: Matthew Summers
+maintainer: Matthew Summers <matt@wishf.co.uk>
+copyright: Copyright (C) 2013 Matthew Summers
+synopsis: A Haskell roguelike library
+stability: experimental
+
+extra-source-files:
+	README.md
+	.gitignore
+
+library
+	build-depends:
+		base
+		ansi-terminal >= 0.6
+
+	exposed-modules:
+		Game.Apollo.Types
+		Game.Apollo.Rendering
+		Game.Apollo.GameState
+		Game.Apollo.Turn
+		Game.Apollo.Cursor
+		Game.Apollo.Coordinate
+		Game.Apollo.Input
