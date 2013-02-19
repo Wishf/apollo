@@ -1,8 +1,8 @@
-module Lib.GameState where
+module Game.Apollo.GameState where
 
 import Control.Monad.State
 import System.Console.ANSI
-import Lib.Types
+import Game.Apollo.Types
 import System.IO
 
 initialiseGame :: IO ()

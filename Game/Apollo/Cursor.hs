@@ -1,8 +1,8 @@
-module Lib.Cursor(up, down, left, right, moveTo) where
+module Game.Apollo.Cursor(up, down, left, right, moveTo) where
 
 import Control.Monad.State
 import System.Console.ANSI
-import Lib.Types
+import Game.Apollo.Types
 
 deltaCursor :: Int -> Int -> GameState a -> GameState a
 deltaCursor x' y' (GameState ((x,y), r, a)) = GameState ((x+x', y+y'), r, a)
