@@ -22,7 +22,7 @@ right n = lift (cursorForward n) >> modify (deltaCursor n 0)
 moveTo :: Coordinate -> Game a ()
 moveTo (x,y) = do {
 	(GameState (xi,yi) r a) <- get;
-	lift (setCursorPosition x y);
+	lift (setCursorPosition y x);
 	put $ GameState (x,y) r a;
 }
 
