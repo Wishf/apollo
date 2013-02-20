@@ -5,7 +5,7 @@ import System.Console.ANSI
 import Game.Apollo.Types
 
 deltaCursor :: Int -> Int -> GameState a -> GameState a
-deltaCursor x' y' (GameState ((x,y), r, a)) = GameState ((x+x', y+y'), r, a)
+deltaCursor x' y' (GameState (x,y) r a) = GameState (x+x', y+y') r a
 
 up :: Int -> Game a ()
 up n = lift (cursorUp n) >> modify (deltaCursor 0 n)
@@ -21,9 +21,9 @@ right n = lift (cursorForward n) >> modify (deltaCursor n 0)
 
 moveTo :: Coordinate -> Game a ()
 moveTo (x,y) = do {
-	GameState ((xi,yi), r, a) <- get;
+	(GameState (xi,yi) r a) <- get;
 	lift (setCursorPosition x y);
-	put.GameState $ ((x,y), r, a);
+	put $ GameState (x,y) r a;
 }
 
 

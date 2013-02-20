@@ -7,41 +7,26 @@ import Game.Apollo.Types
 import System.Console.ANSI
 import Game.Apollo.Cursor
 
-extractCoord :: RenderOp -> Coordinate
-extractCoord (UpdateCharacter c _) = c
-extractCoord (UpdateForeground c _ _) = c
-extractCoord (UpdateBackground c _ _) = c
-
-optimiseOps :: Coordinate -> [RenderOp] -> [RenderOp]
-optimiseOps c = sortBy f
+swapChar :: Coordinate -> CoChar -> Game a ()
+swapChar (x,y) c' = modify f
 	where
-		f a b = compare (dist c $ extractCoord a) (dist c $ extractCoord b)
+		f (GameState cur scr a) = GameState cur (swp scr) a
+
+		swp = foldr (\(i, l) r -> (if i == y then swp' l else l) : r) [] . zip [0..]
+		swp' = foldr (\(i, c) r -> (if i == x then c' else c) : r) [] . zip [0..]
+
+cls :: Game a ()
+cls = lift clearScreen
 
 draw :: Game a ()
 draw = do {
-	GameState (c, r, a) <- get;
-	foldr (\l r -> draw' l >> r) (return ()) (optimiseOps c r);
-	put.GameState $ (c, [], a);
+	GameState c s a <- get;
+	cls;
+	foldr f (return ()) s;
 }
 	where
-		draw' (UpdateCharacter p c) = moveTo p >> lift (putChar c)
-		draw' (UpdateForeground p i c) = moveTo p >> lift (setSGR [SetColor Foreground i c])
-		draw' (UpdateBackground p i c) = moveTo p >> lift (setSGR [SetColor Background i c])
-
-setCharacter :: Coordinate -> Char -> Game a ()
-setCharacter p c = modify f
-	where
-		f (GameState (cur, rq, a)) = GameState (cur, (UpdateCharacter p c):rq, a)
-
-setForeground :: Coordinate -> ColorIntensity -> Color -> Game a ()
-setForeground p i c = modify f
-	where
-		f (GameState (cur, rq, a)) = GameState (cur, (UpdateForeground p i c):rq, a)
-
-setBackground :: Coordinate -> ColorIntensity -> Color -> Game a ()
-setBackground p i c = modify f
-	where
-		f (GameState (cur, rq, a)) = GameState (cur, (UpdateBackground p i c):rq, a)
+		l `f` r = foldr g (return ()) l >> r;
+		(CoChar c (f, fi) (b, bi)) `g` r = lift(setSGR [SetColor Foreground fi f, SetColor Background bi b] >> putChar c) >> r
 
 resetGraphics :: IO ()
 resetGraphics = setSGR []

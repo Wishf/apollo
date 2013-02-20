@@ -13,6 +13,13 @@ copyright:           Copyright (C) 2013 Matthew Summers
 category:            Game
 build-type:          Simple
 cabal-version:       >=1.8
+stability:           experimental
+bug-reports:         https://github.com/Wishf/apollo/issues
+homepage:            https://github.com/Wishf/apollo
+
+source-repository head
+    type:            git
+    location:        git://github.com/Wishf/apollo.git
 
 library
   exposed-modules:     Game.Apollo.Types, Game.Apollo.Turn, Game.Apollo.Rendering, Game.Apollo.Input, Game.Apollo.GameState, Game.Apollo.Cursor, Game.Apollo.Coordinate
@@ -20,9 +27,10 @@ library
   build-depends:       base ==4.5.*, mtl ==2.1.*, ansi-terminal ==0.6.*
 
   if os(windows)
-    other-modules: Game.Apollo.Plat.Win.Input
-    cc-options: -DWINDOWS
-    includes: conio.h
+    other-modules:   Game.Apollo.Plat.Win.Input
+    cpp-options:      -DWINDOWS
+    includes:        conio.h
     extra-libraries: msvcrt
   else
-    other-modules: Game.Apollo.Plat.Unix.Input
+    other-modules:   Game.Apollo.Plat.Unix.Input
+    cpp-options:      -DUNIX

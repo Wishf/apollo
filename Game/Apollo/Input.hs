@@ -1,18 +1,16 @@
 {-# LANGUAGE CPP #-}
 
-module Game.Apollo.Input(
-
 #if defined(WINDOWS)
+module Game.Apollo.Input (
 		module Game.Apollo.Plat.Win.Input
-#else
+) where
+
+import Game.Apollo.Plat.Win.Input
+#elif defined(UNIX)
+	module Game.Apollo.Input (
 		module Game.Apollo.Plat.Unix.Input
+) where
+
+import Game.Apollo.Plat.Unix.Input
 #endif
 
-)
-where
-
-#if defined(WINDOWS)
-		import Game.Apollo.Plat.Win.Input
-#else
-		import Game.Apollo.Plat.Unix.Input
-#endif
